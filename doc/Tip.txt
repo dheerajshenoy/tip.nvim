@@ -1,8 +1,7 @@
 Tip.config                                                          *Tip.config*
 
     Fields: ~
-        {seconds} (number)
-        {title}   (string)
+        {prefix}  (string)
         {url}     (string)
 
 

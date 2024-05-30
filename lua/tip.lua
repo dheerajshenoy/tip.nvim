@@ -1,42 +1,39 @@
 local M = {}
 
 ---@class Tip.config
----@field seconds number
----@field title string
+---@field prefix string
 ---@field url string
-
 ---@type Tip.config
 M.config = {
-  seconds = 2,
-  title = 'Tip!',
-  url = 'https://vtip.43z.one',
+    prefix = 'Tip: ',
+    url = 'https://vtip.43z.one',
 }
 
--- https://www.reddit.com/r/neovim/comments/17qdqkt/get_a_handy_tip_when_you_launch_neovim/
--- setup is the initialization function for the carbon plugin
+M._res = nil
+
 ---@param params Tip.config
 M.setup = function(params)
-  M.config = vim.tbl_deep_extend('force', {}, M.config, params or {})
-  vim.api.nvim_create_autocmd('VimEnter', {
-    callback = function()
-      local job = require 'plenary.job'
-
-      job
-        :new({
-          command = 'curl',
-          args = { '-L', M.config.url },
-          on_exit = function(j, exit_code)
-            local res = table.concat(j:result())
-            if exit_code ~= 0 then
-              res = 'Error fetching tip: ' .. res
-            end
-
-            pcall(vim.notify, res, M.config.seconds, { title = M.config.title })
-          end,
-        })
-        :start()
-    end,
-  })
+    M.config = vim.tbl_deep_extend('force', {}, M.config, params or {})
+    vim.api.nvim_create_autocmd('VimEnter', {
+        callback = function()
+            local job = require("plenary.job")
+            job:new({
+                command = 'curl',
+                args = { '-L', M.config.url },
+                on_exit = function(j, exit_code)
+                    M._res = table.concat(j:result())
+                    if exit_code ~= 0 then
+                        M._res = 'Error fetching tip: ' .. M._res
+                    end
+                    vim.schedule(function() vim.notify(M.config.prefix .. M._res) end)
+                end,
+            }):start()
+        end,
+    })
 end
+
+vim.api.nvim_create_user_command("Tip", function ()
+    vim.schedule(function() vim.notify(M.config.prefix .. M._res) end)
+end, {})
 
 return M
