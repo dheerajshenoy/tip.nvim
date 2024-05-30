@@ -16,6 +16,7 @@ I didn't like the default [`Tip.nvim`](https://github.com/TobinPalmer/Tip.nvim) 
 
 ## Installation
 
+- I have shown the snippet of code for installing using `lazy.nvim`. Snippet can easily be adapted for other package manager.
 ```lua
 -- Lazy.nvim
 return {
