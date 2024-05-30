@@ -8,7 +8,7 @@
 
 ## Why the fork ?
 
-I didn't like the default `Tip.nvim` plugin and wanted to remove the dependency on `nvim-notify` and use the builtin notify ui library in neovim. 
+I didn't like the default [`Tip.nvim`](https://github.com/TobinPalmer/Tip.nvim) plugin and wanted to remove the dependency on [`nvim-notify`](https://github.com/rcarriga/nvim-notify) and use the builtin notify ui library in neovim. 
 
 ## Requirements
 
